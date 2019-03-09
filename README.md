@@ -8,3 +8,5 @@ This repository contains R scripts to perform model-based clustering analysis on
 
 "mclust_roots.R" uses functions from the MClust package to isolate "carbon nanodot-positive cells" from root and leaf samples in the FlowSet. A simple strategy is adopted, defining "carbon nanodot-positive cells" as those with a greater blue fluorescence, indicative of containing carbon nanodots. 
 
+"Figure_plotting.R" is the script used to plot figures used in my Masters thesis. These include presenting the isolating strategies for live root, live leaf and carbon nanodot-positive cell population isolation. 
+
