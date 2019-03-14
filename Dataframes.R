@@ -11,13 +11,13 @@ library(tidyverse)
 library(mclust) 
 
 # Set the working directory ----------------------
-setwd("~/Documents/Data/Scripts/Intelligate")
+#setwd("~/Documents/Data/Scripts/Intelligate")
 
 
 ## Import and pre-process data: ##
 
 # Load FlowFrames from file into FlowSet ---------
-fs <- read.flowSet(path = "~/Documents/Data/FACS/17-06-08 Pulse72", pattern = ".fcs", alter.names = TRUE, phenoData = list(name = "SAMPLE ID", Filename = "$FIL"))
+fs <- read.flowSet(path = 'Data/18-03-29_PulseChase2-roots', pattern = ".fcs", alter.names = TRUE, phenoData = list(name = "SAMPLE ID", Filename = "$FIL"))
 
 # Create Raw DataFrames --------------------------
 
