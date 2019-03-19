@@ -8,8 +8,9 @@
 
 ## Load Libraries:
 library(flowCore)
-library(tidyverse)
-library(mclust) 
+library(tidyverse) # for ggplot
+library(mclust)
+library(IDPmisc) # for "inf.omit()"
 ## Set the working directory:
 # setwd("~/Documents/Data/Scripts/Intelligate")
 ## Include Intelligate core functions:
@@ -33,3 +34,4 @@ liPrompt <- userQuery("Begin mclust? ", default = "n")
 if(liPrompt == "y"){
   print("OK, clustering:")
 }
+
