@@ -1,38 +1,47 @@
+# TEMPORARY line to run mclustDots as script:
+invisible(datalist_log <- logExprs) 
+
+# Set input variables: ----
+data_log <- datalist_log[[1]] # will need internal function eventually
+events <- length(data_log) # number of events in the first experiment
+expts <- length(datalist_log) # number of experiments
+lambD <- 1 # Cluster tuning parameter (range [0,1])
+
 # # plot nanodot fluorescence vs. green autofluorescence
-# plot(x = dflist_log[[8]][,"V405.450.50.A"], y = dflist_log[[8]][,"V405.540.30.A"], xlab = "log 405-450/50 nm", ylab = "log 405-540/30 nm")
+# plot(x = datalist_log[[8]][,"V405.450.50.A"], y = datalist_log[[8]][,"V405.540.30.A"], xlab = "log 405-450/50 nm", ylab = "log 405-540/30 nm")
 # # dot-positive cell subpopulation lies in high V405.450.50.A cluster
 
 # Density Estimation:  ----
 # Produces a density estimate for each data point using a Gaussian finite mixture model from Mclust
-mod_dots<- list(length(fs_log))
-for (i in 1:length(fs_log)){
-  mod_dots[[i]] <- densityMclust(dflist_log[[i]][,c("V405.450.50.A","V405.540.30.A")])
+densE<- list(events)
+for (i in 1:expts){
+  densE[[i]] <- densityMclust(datalist_log[[i]][,c("V405.450.50.A","V405.540.30.A")])
 }
 
 # ... ----
-# plot(mod_dots[[1]], what = "density", type = "persp", data = dflist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
-# plot(mod_dots[[1]], what = "density", data = dflist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
+# plot(densE[[1]], what = "density", type = "persp", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
+# plot(densE[[1]], what = "density", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
 
 # Dimension reduction: ----
-moddr_dots <- list(length(fs_log))
-for (i in 1:length(fs_log)){
-  moddr_dots[[i]] <- MclustDR(mod_dots[[i]], lambda = 1) # lambda (tuning parameter) set to 1 (range [0,1])
+dimR <- list(events)
+for (i in 1:events){
+  dimR[[i]] <- MclustDR(densE[[i]], lambda = lambD) 
 }
 
 # Annotate with cluster number: ----
-cluster_id_dots <- list(length(mod_dots))
-for (i in 1:length(mod_dots)){
-  cluster_id_dots[[i]] <- c(moddr_dots[[i]]$class) 
+clustID <- list(expts)
+for (i in 1:expts){
+  clustID[[i]] <- c(dimR[[i]]$class) 
 }
-# Column bind cluster_id to the dflist:
-dots_cluster <- list(length(mod_dots))
-for (i in 1:length(mod_dots)){
-  dots_cluster[[i]] <- cbind(cluster_id_dots[[i]], dflist_log[[i]])
+# Column bind cluster_id to the datalist:
+dots_cluster <- list(expts)
+for (i in 1:expts){
+  dots_cluster[[i]] <- cbind(clustID[[i]], datalist_log[[i]])
 }
 
 # Point density estimation via Mclust: ---
-mod_dots2 <- list(length(fs_log))
-for (i in 1:length(fs_log)){
+mod_dots2 <- list(events)
+for (i in 1:events){
   mod_dots2[[i]] <- densityMclust(plot_dots[[i]][,c("V405.450.50.A","V405.540.30.A")])
 }
 
@@ -45,9 +54,9 @@ for (i in 1:length(fs_log)){
 
 
 # Dimension reduction with MclustDR: ----
-moddr_dots2 <- list(length(fs_log))
-for (i in 1:length(fs_log)){
-  moddr_dots2[[i]] <- MclustDR(mod_dots2[[i]], lambda = 1)
+moddr_dots2 <- list(events)
+for (i in 1:events){
+  moddr_dots2[[i]] <- MclustDR(mod_dots2[[i]], lambda = lambD)
 }
 
 
@@ -56,9 +65,9 @@ cluster_id_dots2 <- list(length(mod_dots2))
 for (i in 1:length(mod_dots2)){
   cluster_id_dots2[[i]] <- c(moddr_dots2[[i]]$class) 
 }
-# Column bind cluster_id_dots2 to the dflist to isolate cluster(s)
-dots_cluster2 <- list(length(mod_dots))
-for (i in 1:length(mod_dots)){
+# Column bind cluster_id_dots2 to the datalist to isolate cluster(s)
+dots_cluster2 <- list(expts)
+for (i in 1:expts){
   dots_cluster2[[i]] <- cbind(cluster_id_dots2[[i]], plot_dots[[i]][,2:17])
 }
 
