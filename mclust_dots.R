@@ -1,11 +1,14 @@
 # TEMPORARY line to run mclustDots as script:
 invisible(datalist_log <- logExprs) 
 
-# Set input variables: ----
-data_log <- datalist_log[[1]] # will need internal function eventually
-events <- length(data_log) # number of events in the first experiment
-expts <- length(datalist_log) # number of experiments
-lambD <- 1 # Cluster tuning parameter (range [0,1])
+# Anonymous function gets data for the current experiment:
+dataFetch <- function (x) return (datalist_log[[x]])
+
+# Initialise input variables: ----
+this_data <- dataFetch(1)
+events <- length(this_data) # number of events in the current FCS
+experiments <- length(datalist_log) # number of FCS's input
+lambD <- 1 # Cluster tuning parameter (range ]0,1])
 
 # # plot nanodot fluorescence vs. green autofluorescence
 # plot(x = datalist_log[[8]][,"V405.450.50.A"], y = datalist_log[[8]][,"V405.540.30.A"], xlab = "log 405-450/50 nm", ylab = "log 405-540/30 nm")
@@ -14,7 +17,7 @@ lambD <- 1 # Cluster tuning parameter (range [0,1])
 # Density Estimation:  ----
 # Produces a density estimate for each data point using a Gaussian finite mixture model from Mclust
 densE<- list(events)
-for (i in 1:expts){
+for (i in 1:experiments){
   densE[[i]] <- densityMclust(datalist_log[[i]][,c("V405.450.50.A","V405.540.30.A")])
 }
 
@@ -29,13 +32,13 @@ for (i in 1:events){
 }
 
 # Annotate with cluster number: ----
-clustID <- list(expts)
-for (i in 1:expts){
+clustID <- list(experiments)
+for (i in 1:experiments){
   clustID[[i]] <- c(dimR[[i]]$class) 
 }
 # Column bind cluster_id to the datalist:
-dots_cluster <- list(expts)
-for (i in 1:expts){
+dots_cluster <- list(experiments)
+for (i in 1:experiments){
   dots_cluster[[i]] <- cbind(clustID[[i]], datalist_log[[i]])
 }
 
@@ -66,8 +69,8 @@ for (i in 1:length(mod_dots2)){
   cluster_id_dots2[[i]] <- c(moddr_dots2[[i]]$class) 
 }
 # Column bind cluster_id_dots2 to the datalist to isolate cluster(s)
-dots_cluster2 <- list(expts)
-for (i in 1:expts){
+dots_cluster2 <- list(experiments)
+for (i in 1:experiments){
   dots_cluster2[[i]] <- cbind(cluster_id_dots2[[i]], plot_dots[[i]][,2:17])
 }
 
