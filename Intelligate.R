@@ -15,7 +15,7 @@ library(IDPmisc) # for "inf.omit()"
 # setwd("~/Documents/Data/Scripts/Intelligate")
 ## Include Intelligate core functions:
 source("DataFrames.R")
-
+source("mclust_dots.R")
 #source("mclust_roots.R")
 #source("mclust_leaves.R")
 #source("Figure_plotting.R")
@@ -33,6 +33,6 @@ liPrompt <- userQuery("Begin mclust? ", default = "n")
 
 if(liPrompt == "y"){
   print("OK, clustering:")
-  source("mclust_dots.R")
+  clusterList <- mclustDots(logExprs)
 }
 
