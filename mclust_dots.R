@@ -16,20 +16,22 @@ mclustDots <- function (datalist_log){
   
   # Density Estimation:  ----
   # Produces a density estimate for each data point using a Gaussian finite mixture model from Mclust
-  densE<- vector("list", events)
+  densE<- vector("list", experiments)
   for (i in 1:experiments){
-    densE[[i]] <- densityMclust(datalist_log[[i]][,c("V405.450.50.A","V405.540.30.A")])
+    densE[[i]] <- densityMclust(this_data[,c("V405.450.50.A","V405.540.30.A")])
   }
-  
+  print("Dens.Est. complete! Reducing dims...")
   # ... ----
   # plot(densE[[1]], what = "density", type = "persp", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
   # plot(densE[[1]], what = "density", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
   
   # Dimension reduction: ----
-  dimR <- vector("list",events)
-  for (i in 1:events){
+  dimR <- vector("list",experiments)
+  for (i in 1:experiments){
     dimR[[i]] <- MclustDR(densE[[i]], lambda = lambD) 
   }
+  
+  print("dim's reduced.")
   
   # Annotate with cluster number: ----
   clustID <- list(experiments)
