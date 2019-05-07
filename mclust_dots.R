@@ -20,7 +20,7 @@ mclustDots <- function (datalist_log){
   for (i in 1:experiments){
     densE[[i]] <- densityMclust(this_data[,c("V405.450.50.A","V405.540.30.A")])
   }
-  print("Dens.Est. complete! Reducing dims...")
+
   # ... ----
   # plot(densE[[1]], what = "density", type = "persp", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
   # plot(densE[[1]], what = "density", data = datalist_log[[1]][,c("V405.450.50.A","V405.540.30.A")])
@@ -28,10 +28,10 @@ mclustDots <- function (datalist_log){
   # Dimension reduction: ----
   dimR <- vector("list",experiments)
   for (i in 1:experiments){
-    dimR[[i]] <- MclustDR(densE[[i]], lambda = lambD) 
+    dimR[[i]] <- MclustDR(as.Mclust(densE[[i]]), lambda = lambD) 
   }
   
-  print("dim's reduced.")
+
   
   # Annotate with cluster number: ----
   clustID <- list(experiments)
