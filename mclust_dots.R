@@ -1,8 +1,9 @@
 
 mclustDots <- function (datalist_log){
+  
   # Anonymous function gets data for the current experiment:
   dataFetch <- function (x) return (datalist_log[[x]])
-  
+
   # Initialise input variables: ----
   this_data <- dataFetch(1)
   events <- dim(this_data)[1] # number of events in the current FCS
